@@ -27,3 +27,16 @@ jobs:
           python run_job.py views_per_image --workers 2
           python run_job.py megabytes_per_hour --workers 2
           python run_job.py distinct_pages_per_hour --workers 2
+
+      - name: "Task 3: same answer with 1 and 4 workers"
+        run: |
+          python -c "
+          from mapreduce import run_job
+          one, _ = run_job('jobs.distinct_pages_per_hour', 'data/nasa_1995-07-01.log', partitions=4, workers=1)
+          four, _ = run_job('jobs.distinct_pages_per_hour', 'data/nasa_1995-07-01.log', partitions=4, workers=4)
+          print('1 worker :', sum(one.values()), 'distinct pages in total')
+          print('4 workers:', sum(four.values()), 'distinct pages in total')
+          if one != four:
+              raise SystemExit('Task 3: the job gives different answers with 1 and 4 workers.')
+          print('Same answer with 1 and 4 workers.')
+          "

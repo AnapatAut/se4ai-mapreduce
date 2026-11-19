@@ -78,8 +78,9 @@ Useful status codes: **200** OK (the server sent the file), **304** Not Modified
 | `jobs/megabytes_per_hour.py` | Data sent per hour of the day. | **Task 2** |
 | `jobs/distinct_pages_per_hour.py` | Different pages requested per hour. Written by a colleague; it has a bug. | **Task 3** |
 | `tests/` | One test file per task. They use `data/sample.log`. | No. Make them pass. |
-| `.github/workflows/tests.yml` | On every push, GitHub runs the tests, then runs all three jobs on the real day. | No. |
+| `.github/workflows/tests.yml` | On every push, GitHub runs the tests, runs all three jobs on the real day, and checks that Task 3 gives the same answer with 1 and 4 workers. | No. |
 | `stretch/`, `tools/` | Stretch goals. | Only if you finish early. |
+| `solutions/` | Solutions to Tasks 1 to 3, for when you are really stuck. **Try on your own first.** | No. |
 | `REFLECTION.md` | Three short questions. | **Yes**, at the end. |
 
 ---
@@ -106,6 +107,9 @@ Useful status codes: **200** OK (the server sent the file), **304** Not Modified
 > **Stuck?**
 > - **Windows:** type `python` wherever this README says `python3` (after you activate the virtual environment). Use `py` only to create it.
 > - Always run commands from the repository root (the folder with this README).
+
+> [!WARNING]
+> **Solutions are in [`solutions/`](solutions/README.md). Try each task on your own first.** Use the **Stuck?** tips and ask the TA before you look. If you do open a solution, open only the task you are stuck on, and write your own version afterwards.
 
 ---
 
@@ -212,7 +216,7 @@ git commit -m "Write MapReduce jobs"
 git push
 ```
 
-Open the **Actions** tab of your fork. The **mapreduce-tests** run installs Python, runs `pytest`, then runs your three jobs on the real day. It should be green.
+Open the **Actions** tab of your fork. The **mapreduce-tests** run installs Python, runs `pytest`, runs your three jobs on the real day, and finally runs your Task 3 job with 1 and with 4 workers and fails if the answers differ. It should be green.
 
 > **Stuck?** If `git push` asks for a password, use the Codespace, GitHub Desktop, or sign in with `gh auth login`.
 
@@ -263,7 +267,10 @@ python3 run_job.py views_per_image --input data/full/nasa_1995-07.log --partitio
 python3 run_job.py views_per_image --input data/full/nasa_1995-07.log --partitions 8 --workers 4
 ```
 
-The download is 20.7 MB and the archive's server can be slow. The file stays on your machine (`data/full/` is not committed). Compare the `map` times. Why does the map step get faster with more workers, but not 4 times faster?
+- The download is 20.7 MB and the archive's server can be slow.
+- The file stays on your machine (`data/full/` is not committed).
+- Compare the `map` times.
+- Why does the map step get faster with more workers, but not 4 times faster?
 
 ---
 
