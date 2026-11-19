@@ -1,0 +1,14 @@
+{
+  "name": "SE4AI Week 7 MapReduce",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "pip install -r requirements.txt -r requirements-stretch.txt",
+  "forwardPorts": [8787],
+  "portsAttributes": {
+    "8787": { "label": "Dask dashboard" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# Only for the Dask stretch goal. Tasks 1-3 need only requirements.txt.
+dask[distributed,diagnostics]==2026.8.0

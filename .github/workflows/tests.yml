@@ -1,0 +1,29 @@
+# Runs the tests on GitHub's machines every time you push.
+name: mapreduce-tests
+
+on:
+  push:
+  workflow_dispatch:      # adds a "Run workflow" button on the Actions tab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Test the jobs
+        run: pytest -q
+
+      - name: Run the jobs on one day of real logs
+        run: |
+          python run_job.py views_per_image --workers 2
+          python run_job.py megabytes_per_hour --workers 2
+          python run_job.py distinct_pages_per_hour --workers 2
