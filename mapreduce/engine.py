@@ -29,8 +29,14 @@ import importlib
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from multiprocessing import Pool
+import multiprocessing
 from pathlib import Path
+
+
+# Always start worker processes fresh ("spawn"), as on macOS and Windows.
+# Linux would otherwise copy the parent process ("fork"), including any
+# leftover module state, so buggy jobs would behave differently per OS.
+_ctx = multiprocessing.get_context("spawn")
 
 
 @dataclass
@@ -107,7 +113,7 @@ def run_job(job_name: str, input_path, partitions: int = 4, workers: int = 1):
     t = time.perf_counter()
     tasks = [(job_name, c) for c in chunks]
     if workers > 1:
-        with Pool(workers) as pool:
+        with _ctx.Pool(workers) as pool:
             mapped = pool.map(_map_partition, tasks)
     else:
         mapped = [_map_partition(task) for task in tasks]
@@ -128,7 +134,7 @@ def run_job(job_name: str, input_path, partitions: int = 4, workers: int = 1):
     t = time.perf_counter()
     rtasks = [(job_name, k, vs) for k, vs in groups.items()]
     if workers > 1:
-        with Pool(workers) as pool:
+        with _ctx.Pool(workers) as pool:
             reduced = pool.map(_reduce_key, rtasks, chunksize=256)
     else:
         reduced = [_reduce_key(task) for task in rtasks]
