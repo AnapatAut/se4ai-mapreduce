@@ -31,7 +31,12 @@ def mapper(line):
     """
     # TODO: parse the line, check the four conditions above, then
     #       yield path, 1
-    raise NotImplementedError("Task 1: write the mapper")
+    request = parse_line(line)
+    if request is None:
+        return
+    if (request["method"] == "GET" and request["status"] == 200
+            and request["path"].lower().endswith(IMAGE_EXTENSIONS)):
+        yield request["path"], 1
 
 
 def reducer(key, values):
@@ -41,4 +46,4 @@ def reducer(key, values):
     Return the total number of views of that image.
     """
     # TODO: return the total
-    raise NotImplementedError("Task 1: write the reducer")
+    return sum(values)

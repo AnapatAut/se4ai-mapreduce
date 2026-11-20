@@ -26,11 +26,8 @@ def mapper(line):
     request = parse_line(line)
     if request is None or not request["path"].lower().endswith(".html"):
         return
-    page = request["path"]
-    if page not in already_sent:
-        already_sent.add(page)
-        yield request["hour"], page
+    yield request["hour"], request["path"]
 
 
 def reducer(key, values):
-    return len(values)
+    return len(set(values))
